@@ -1,0 +1,50 @@
+service: serverless-apollo-datasource-dynamodb
+
+frameworkVersion: ">=1.21.0 <2.0.0"
+
+provider:
+  profile: ${opt:stage}
+  name: aws
+  runtime: nodejs8.10
+  stage: ${opt:stage}
+  region: ${opt:region}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "xray:PutTraceSegments"
+        - "xray:PutTelemetryRecords"
+      Resource:
+        - "*"
+    - Effect: "Allow"
+      Action:
+        - "ssm:GetParameters"
+      Resource:
+        - "arn:aws:ssm:*:*:parameter/apollo-test/${opt:stage}/*"
+  environment:
+    SERVERLESS_PROJECT: serverless-apollo-datasource-dynamodb
+    SERVERLESS_STAGE: ${opt:stage}
+    SERVERLESS_REGION: ${opt:region}    
+    AWS_XRAY_CONTEXT_MISSING: LOG_ERROR
+    NY_TIMES_APIKEY: ${ssm:/apollo-test/${opt:stage}/NY_TIMES_APIKEY~true}
+    # SLS_DEBUG: true
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    port: 4200
+  webpackIncludeModules: true
+
+functions:
+  graphql:
+    handler: handler.graphqlHandler
+    events:
+    - http:
+        path: graphql
+        method: post
+        cors: true
+    - http:
+        path: graphql
+        method: get
+        cors: true       
