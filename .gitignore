@@ -2,3 +2,4 @@ node_modules
 .webpack
 yarn-error.log
 .serverless
+.dynamodb

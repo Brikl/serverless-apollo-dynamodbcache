@@ -1,11 +1,6 @@
 import 'babel-polyfill';
 const { ApolloServer, gql } = require('apollo-server-lambda');
-const { DynamoDBCache } = require('apollo-server-dynamodb');
-
-const AWSXRay = require('aws-xray-sdk');
-const AWS = AWSXRay.captureAWS(require('aws-sdk'));
-
-
+const { DynamoDBCache } = require('./dynamoCache');
 const typeDefs = gql`
   type Todo @cacheControl(maxAge: 120){
     id: String!
@@ -26,14 +21,12 @@ const resolvers = {
             id: id,
             content: "HAHA1"
           }
-          break;
       
         default:
           return {
             id: id,
             content: "HAHAX"
           }
-          break;
       }     
     }    
   }
@@ -88,6 +81,5 @@ exports.graphqlHandler = (event, context, callback) => {
         credentials: true,
       },
   });
-  // context.callbackWaitsForEmptyEventLoop = false;
   return handler(event, context, callback);
 }

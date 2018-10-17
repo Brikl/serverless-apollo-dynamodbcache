@@ -7,11 +7,10 @@
     "url": "git@github.com:Brikl/serverless-apollo-persisted-queries-dynamodb.git"
   },
   "scripts": {
-    "start": "serverless offline start --region us-east-1 --stage staging"
+    "start": "serverless dynamodb install --stage staging --region us-east-1 && serverless offline start --region us-east-1 --stage staging"
   },
   "dependencies": {
-    "apollo-server-lambda": "^2.0.0-rc.6",
-    "apollo-server-dynamodb": "https://github.com/Brikl/serverless-apollo-dynamodbcache#version-2",
+    "apollo-server-lambda": "^2.1.0",
     "aws-xray-sdk": "^1.2.0",
     "babel-polyfill": "6.26.0",
     "graphql": "^0.13.2"
@@ -27,6 +26,7 @@
     "imports-loader": "^0.7.1",
     "jest": "^21.2.1",
     "jsonfile": "^4.0.0",
+    "serverless-dynamodb-local": "^0.2.35",
     "serverless-offline": "^3.25.4",
     "serverless-webpack": "^5.1.5",
     "webpack": "^4.2.0",

@@ -22,7 +22,7 @@ const client = new ApolloClient({
 
 const GET_TODO = gql`
   query {
-    todo(id: "10") {
+    todo(id: "1") {
       id
       content
     }
