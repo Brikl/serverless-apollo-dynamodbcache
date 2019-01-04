@@ -1,24 +1,29 @@
-service: serverless-apollo-datasource-dynamodb
+service: sls-apollo-datasource-dynamodb
 
-frameworkVersion: ">=1.21.0 <2.0.0"
+frameworkVersion: '>=1.21.0 <2.0.0'
 
 provider:
-  profile: ${opt:stage}
+  # profile: ${opt:stage}
   name: aws
   runtime: nodejs8.10
   stage: ${opt:stage}
   region: ${opt:region}
   iamRoleStatements:
-    - Effect: "Allow"
+    - Effect: 'Allow'
       Action:
-        - "xray:PutTraceSegments"
-        - "xray:PutTelemetryRecords"
+        - 'dynamodb:*'
       Resource:
-        - "*"
+        - 'arn:aws:dynamodb:us-east-1:*'
+    - Effect: 'Allow'
+      Action:
+        - 'xray:PutTraceSegments'
+        - 'xray:PutTelemetryRecords'
+      Resource:
+        - '*'
   environment:
-    SERVERLESS_PROJECT: serverless-apollo-datasource-dynamodb
+    SERVERLESS_PROJECT: sls-apollo-datasource-dynamodb
     SERVERLESS_STAGE: ${opt:stage}
-    SERVERLESS_REGION: ${opt:region}    
+    SERVERLESS_REGION: ${opt:region}
     AWS_XRAY_CONTEXT_MISSING: LOG_ERROR
     # SLS_DEBUG: true
 plugins:
@@ -43,15 +48,14 @@ functions:
   graphql:
     handler: handler.graphqlHandler
     events:
-    - http:
-        path: graphql
-        method: post
-        cors: true
-    - http:
-        path: graphql
-        method: get
-        cors: true       
-
+      - http:
+          path: graphql
+          method: post
+          cors: true
+      - http:
+          path: graphql
+          method: get
+          cors: true
 
 Resources:
   psqTable:
